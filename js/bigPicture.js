@@ -14,6 +14,8 @@ const body = document.querySelector('body');
 
 const socialComments = document.querySelector('.social__comments');
 
+const UPLOADED_COMMENTS = 5;
+
 const createComments = (comments) => {
 
   comments.forEach(({avatar, message, name}) => {
@@ -101,7 +103,7 @@ function updateCurrentSocialCommentsCount(visibleSocialCommentsLenght) {
 }
 
 function downloadComments() {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < UPLOADED_COMMENTS; i++) {
     const hiddenSocialComment = socialComments.querySelector('.hidden');
     if (hiddenSocialComment !== null) {
       hiddenSocialComment.classList.remove('hidden');
