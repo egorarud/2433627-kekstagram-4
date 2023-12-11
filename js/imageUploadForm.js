@@ -10,12 +10,14 @@ const closeButton = document.querySelector('.img-upload__cancel');
 const textDescriptionField = imgUploadForm.querySelector('.text__description');
 const textHashtagsField = imgUploadForm.querySelector('.text__hashtags');
 
-let isFocused = false;
+const HASHTAGS_MAX_COUNT = 5;
+const DESCRIPTION_MAX_LENGHT = 140;
+
+const isFocused = (element) => document.activeElement === element;
 
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && !isFocused) {
+  if (isEscapeKey(evt) && !isFocused(textDescriptionField) && !isFocused(textHashtagsField)) {
     evt.preventDefault();
-    evt.stopPropagation();
     closeUploadOverlay();
   }
 };
@@ -43,26 +45,10 @@ closeButton.addEventListener('click', () => {
   closeUploadOverlay();
 });
 
-textDescriptionField.addEventListener('focus', () => {
-  isFocused = true;
-});
-
-textDescriptionField.addEventListener('blur', () => {
-  isFocused = false;
-});
-
-textHashtagsField.addEventListener('focus', () => {
-  isFocused = true;
-});
-
-textHashtagsField.addEventListener('blur', () => {
-  isFocused = false;
-});
-
 const pristine = new Pristine(imgUploadForm);
 
 function validateDescription(value) {
-  return value.length <= 140;
+  return value.length <= DESCRIPTION_MAX_LENGHT;
 }
 
 function validateHashtags(value) {
@@ -73,7 +59,7 @@ function validateHashtags(value) {
   }
 
   const hashtags = value.split(' ');
-  if (hashtags.length > 5 && findDuplicates(hashtags)) {
+  if (hashtags.length > HASHTAGS_MAX_COUNT && findDuplicates(hashtags)) {
     return false;
   }
 
@@ -82,6 +68,8 @@ function validateHashtags(value) {
       return false;
     }
   }
+
+  return true;
 }
 
 pristine.addValidator(
